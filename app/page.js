@@ -1,10 +1,12 @@
 import React from 'react'
+import Note from './components/note'
 const page = () => {
   return (
     <div>
-      <div className='text-3xl text-purple-600 font-bold font-mono'>Stable-Note</div>
+      <div className='text-1xl text-blue-300 font-bold font-mono lg:text-3xl'>Stable-Note</div>
       <div>
-        {/*menu */}
+        {/* components */}
+        <Note></Note>
       </div>
     </div>
   )
