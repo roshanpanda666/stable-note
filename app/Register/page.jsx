@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useRef } from 'react'
+import { useRouter } from "next/navigation"
 
 const Page = () => {
   const usernameRef = useRef();
@@ -7,6 +8,8 @@ const Page = () => {
   const passwordRef = useRef();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  const router=useRouter()
 
   const showSuccessMessage = () => {
     setMessage("Registration successful ✅");
@@ -43,6 +46,7 @@ const Page = () => {
         usernameRef.current.value = '';
         emailRef.current.value = '';
         passwordRef.current.value = '';
+        router.replace("/loginform")
       } else {
         setMessage("Registration failed ❌");
         setTimeout(() => setMessage(""), 2000);

@@ -1,4 +1,7 @@
-.register form done 
-. now work on the login page 
-. make auth route and make session 
-. after that work on profile page
+. work on profile page
+. make the login page at the "/"
+. make usr data visible on the profile page
+. protect the routes 
+. make the api route for note page
+. and make the note page works (PUT method) also add (delete method)
+
