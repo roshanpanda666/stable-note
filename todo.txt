@@ -1,0 +1,4 @@
+.register form done 
+. now work on the login page 
+. make auth route and make session 
+. after that work on profile page
