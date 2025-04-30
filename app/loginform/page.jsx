@@ -27,7 +27,7 @@ export default function Loginform(){
                 return
             }
 
-            router.replace("/")
+            router.replace("/userdetail")
         }
         catch(error){
             console.log("error");
