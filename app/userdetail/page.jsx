@@ -21,7 +21,7 @@ const Userinfo = () => {
     <div className="flex justify-center items-center flex-col px-4 py-8 min-h-screen">
       <div className="w-full max-w-md border border-blue-300 rounded-xl p-6 shadow-lg">
         <h2 className="text-center text-2xl text-white font-bold mb-6">
-          Your Details
+          Your Profile
         </h2>
 
         <div className="mb-4">
@@ -37,7 +37,7 @@ const Userinfo = () => {
         </div>
 
         <div className="mb-4">
-          <div className="text-white font-medium">Comments:</div>
+          <div className="text-white font-medium">notes:</div>
           <div className="ml-2 flex flex-col text-left text-sm mt-1">
             {comments.length > 0 ? (
               comments.map((c, i) => (
