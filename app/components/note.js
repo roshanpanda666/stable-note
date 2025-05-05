@@ -54,7 +54,7 @@ const Note = () => {
       const result = await response.json();
 
       if (result.success) {
-        alert("Note added ✅");
+       
         noteData.current.value = "";
         fetchNotes(); // Refresh comments
       } else {
