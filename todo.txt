@@ -1,7 +1,4 @@
-. work on profile page
-. make the login page at the "/"
-. make usr data visible on the profile page
-. protect the routes 
-. make the api route for note page
-. and make the note page works (PUT method) also add (delete method)
+.implement put and delete api
+.edit button not have to place beside the note , when user taps in the note it should work like the edit button
+.when log out is pressed it should route.replace -> login page
 
