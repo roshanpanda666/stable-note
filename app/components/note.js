@@ -34,6 +34,11 @@ const Note = () => {
 
   // Function to add a note
   const noteaddfunction = async () => {
+    // Trigger vibration on supported devices
+    if (typeof window !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate(80); // Vibrate for 100ms
+    }
+
     const comment = noteData.current.value;
     const email = session?.user?.email;
 
@@ -54,7 +59,6 @@ const Note = () => {
       const result = await response.json();
 
       if (result.success) {
-       
         noteData.current.value = "";
         fetchNotes(); // Refresh comments
       } else {
@@ -83,7 +87,11 @@ const Note = () => {
         <div className='border-1 border-blue-300 w-full mt-3 flex justify-center flex-col items-center rounded-2xl'>
           <div className='flex'>
             <div className='border-1 border-white shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] lg:hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] lg:w-[50vw] w-[70vw] h-11 mt-6 mb-6 rounded-3xl'>
-              <input ref={noteData} type="text" className='lg:w-[50vw] w-[70vw] h-11 rounded-3xl border-0 lg:text-3xl text-2xl' />
+              <input
+                ref={noteData}
+                type="text"
+                className='lg:w-[50vw] w-[70vw] h-11 rounded-3xl border-0 lg:text-3xl text-2xl'
+              />
             </div>
             <div className='h-11 mt-6 mb-6 ml-6 text-3xl'>
               <button onClick={noteaddfunction} className='cursor-pointer'>+</button>
