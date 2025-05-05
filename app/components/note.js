@@ -1,49 +1,73 @@
 "use client"
 import Link from 'next/link'
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRef } from 'react'
-
 
 const Note = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const username = session?.user?.name || "...";
-  const noteData=useRef()
+  const noteData = useRef();
+  const [comments, setComments] = useState([]);
 
-  const noteaddfunction= async()=>{
-    const comment = noteData.current.value;
-  const email = session?.user?.email;
+  // Function to fetch user notes
+  const fetchNotes = async () => {
+    try {
+      const response = await fetch("/api/getusernote");
+      const data = await response.json();
 
-  if (!comment || !email) {
-    alert("Note or email missing!");
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/noteDataAddApi", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, comment }),
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert("Note added ✅");
-      noteData.current.value = ""; // clear input after success
-    } else {
-      alert("Failed to add note ❌");
+      if (data.success) {
+        setComments(data.comments);
+      } else {
+        console.warn("Failed to fetch notes:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching notes:", err);
     }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong 💥");
-  }
-  }
+  };
+
+  // Call fetchNotes when session is available
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchNotes();
+    }
+  }, [status]);
+
+  // Function to add a note
+  const noteaddfunction = async () => {
+    const comment = noteData.current.value;
+    const email = session?.user?.email;
+
+    if (!comment || !email) {
+      alert("Note or email missing!");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/noteDataAddApi", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, comment }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Note added ✅");
+        noteData.current.value = "";
+        fetchNotes(); // Refresh comments
+      } else {
+        alert("Failed to add note ❌");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong 💥");
+    }
+  };
+
   return (
     <div>
-      
       <div className='flex gap-60 lg:gap-[70rem]'>
         <Link href="/note">
           <div className='text-1xl text-blue-300 font-bold font-mono lg:text-3xl'>Stable-Note</div>
@@ -64,16 +88,27 @@ const Note = () => {
             <div className='h-11 mt-6 mb-6 ml-6 text-3xl'>
               <button onClick={noteaddfunction} className='cursor-pointer'>+</button>
             </div>
-            
           </div>
 
-          <div>
-            {/* user's comments here */}
+          {/* Render user comments here */}
+          <div className="text-white p-4 w-full flex flex-col items-center gap-2">
+            {comments.length === 0 ? (
+              <div>No notes yet ✏️</div>
+            ) : (
+              comments.map((comment, index) => (
+                <div
+                  key={index}
+                  className="border-b-1 mt-2 text-white px-4 py-2 rounded-xl shadow-md w-[80%] text-center"
+                >
+                  {comment}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Note
+export default Note;
