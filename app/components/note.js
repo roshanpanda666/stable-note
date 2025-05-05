@@ -98,7 +98,7 @@ const Note = () => {
               comments.map((comment, index) => (
                 <div
                   key={index}
-                  className="border-b-1 mt-2 text-white px-4 py-2 rounded-xl shadow-md w-[80%] text-center"
+                  className="border-b-gray-600 border-b-[0.5px] rounded-b-none mt-2 text-white px-4 py-2 rounded-xl shadow-md w-[80%] text-center"
                 >
                   {comment}
                 </div>
