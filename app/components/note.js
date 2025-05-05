@@ -78,7 +78,7 @@ const Note = () => {
         </Link>
 
         <Link href="/userdetail">
-          <div className='text-blue-300 mt-2'>profile : {username}</div>
+          <div className='text-blue-300 mt-2'>Hello {username}</div>
         </Link>
       </div>
 
