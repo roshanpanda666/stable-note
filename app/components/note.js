@@ -166,15 +166,7 @@ const Note = () => {
                   ) : (
                     <>
                       <div className="w-full text-center">{comment}</div>
-                      <button
-                        onClick={() => {
-                          setEditingIndex(index);
-                          setEditedComment(comment);
-                        }}
-                        className="ml-4 bg-blue-500 text-white px-3 py-1 rounded"
-                      >
-                        Edit
-                      </button>
+                      
                     </>
                   )}
                 </div>
