@@ -8,8 +8,9 @@ const Note = () => {
   const username = session?.user?.name || "...";
   const noteData = useRef();
   const [comments, setComments] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedComment, setEditedComment] = useState("");
 
-  // Function to fetch user notes
   const fetchNotes = async () => {
     try {
       const response = await fetch("/api/getusernote");
@@ -25,18 +26,15 @@ const Note = () => {
     }
   };
 
-  // Call fetchNotes when session is available
   useEffect(() => {
     if (status === "authenticated") {
       fetchNotes();
     }
   }, [status]);
 
-  // Function to add a note
   const noteaddfunction = async () => {
-    // Trigger vibration on supported devices
     if (typeof window !== "undefined" && "vibrate" in navigator) {
-      navigator.vibrate(80); // Vibrate for 100ms
+      navigator.vibrate(80);
     }
 
     const comment = noteData.current.value;
@@ -60,9 +58,40 @@ const Note = () => {
 
       if (result.success) {
         noteData.current.value = "";
-        fetchNotes(); // Refresh comments
+        fetchNotes();
       } else {
         alert("Failed to add note ❌");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong 💥");
+    }
+  };
+
+  const updateNote = async (index) => {
+    const email = session?.user?.email;
+    if (!email || !editedComment.trim()) {
+      alert("Missing data");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/updateNote", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, index, newComment: editedComment }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setEditingIndex(null);
+        setEditedComment("");
+        fetchNotes();
+      } else {
+        alert("Failed to update note ❌");
       }
     } catch (err) {
       console.error(err);
@@ -98,17 +127,56 @@ const Note = () => {
             </div>
           </div>
 
-          {/* Render user comments here */}
           <div className="text-white p-4 w-full flex flex-col items-center gap-2">
             {comments.length === 0 ? (
               <div>No notes yet ✏️</div>
             ) : (
               comments.map((comment, index) => (
                 <div
+                  onDoubleClick={() => {
+                    setEditingIndex(index);
+                    setEditedComment(comment);
+                  }}
                   key={index}
-                  className="border-b-gray-600 border-b-[0.5px] rounded-b-none mt-2 text-white px-4 py-2 rounded-xl shadow-md w-[80%] text-center"
+                  className="border-b-gray-600 border-b-[0.5px] mt-2 px-4 py-2 rounded-xl shadow-md w-[80%] flex justify-between items-center"
                 >
-                  {comment}
+                  {editingIndex === index ? (
+                    <>
+                      <input
+                        value={editedComment}
+                        onChange={(e) => setEditedComment(e.target.value)}
+                        className="w-full text-gray p-2 rounded"
+                      />
+                      <button
+                        onClick={() => updateNote(index)}
+                        className="ml-2 bg-green-500 text-white px-3 py-1 rounded"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingIndex(null);
+                          setEditedComment("");
+                        }}
+                        className="ml-2 bg-gray-500 text-white px-3 py-1 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-full text-center">{comment}</div>
+                      <button
+                        onClick={() => {
+                          setEditingIndex(index);
+                          setEditedComment(comment);
+                        }}
+                        className="ml-4 bg-blue-500 text-white px-3 py-1 rounded"
+                      >
+                        Edit
+                      </button>
+                    </>
+                  )}
                 </div>
               ))
             )}

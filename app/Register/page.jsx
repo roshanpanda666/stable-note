@@ -30,7 +30,7 @@ const Page = () => {
 
     setError(""); // clear previous error
 
-    const comments = ["demo note"];
+    const comments = ["double click to edit"];
 
     try {
       const res = await fetch("/api/register", {
