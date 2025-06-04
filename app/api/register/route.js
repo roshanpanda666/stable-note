@@ -14,10 +14,10 @@ export async function POST(request) {
 
     // Replace plain password with hashed one
     const userr = new UserNote({
-      name: payload.name, // assuming you're sending 'username' from frontend
+      name: payload.name, 
       email: payload.email,
       password: hashedPassword,
-      comments: payload.comments, // wrap in array, since schema expects array
+      comments: payload.comments, 
     });
 
     const result = await userr.save();
