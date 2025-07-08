@@ -5,6 +5,7 @@ import { authOption } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import { UserNote } from "@/app/lib/model/userdata";
 
+
 export async function GET(){
     try {
         await mongoose.connect(connectionSRT)
